@@ -1,0 +1,37 @@
+version: "3.7" # otherwise there seems to be a bad gateway error
+
+services:
+  rtmp-server:
+    build:
+      args:
+        BUILD_ARCH: ${BUILD_ARCH}
+        BUILD_OS: ${BUILD_OS}
+        BUILD_TIMESTAMP: ${BUILD_TIMESTAMP}
+        COMMIT_HASH: ${COMMIT_HASH}
+        VERSION: latest
+    container_name: rtmp-server
+    depends_on:
+      - traefik
+    image: robinwalterfit/rtmp-server:latest
+    labels:
+      - "traefik.http.routers.rtmp-server.rule=Host(`stream.localhost`)"
+      - "traefik.port=80"
+    ports:
+      - 1935:1935
+
+  traefik:
+    command:
+      - "--api.insecure=true"
+      - "--entrypoints.web.address=:80"
+      - '--providers.docker.defaultRule=Host(`{{ index .Labels "com.docker.compose.service" }}.{{ index .Labels "com.docker.compose.project" }}.localhost`)'
+      - "--providers.docker.exposedByDefault=true"
+      - "--providers.docker.httpClientTimeout=180"
+    container_name: traefik
+    labels:
+      - "traefik.http.services.traefik-traefik.loadBalancer.server.port=8080"
+    image: traefik:v2.9.6
+    ports:
+      - 80:80
+      - 8080:8080
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock

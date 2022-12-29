@@ -1,0 +1,48 @@
+### Docker ###
+.dockerignore
+**/*.Dockerfile
+docker-compose*.yml
+
+### EditorConfig ###
+.editorconfig
+
+### ESLint ###
+.eslintignore
+.eslintrc
+
+### Gatsby.js ###
+.cache/
+public/
+
+### Git ###
+.github/
+commitlint.config.js
+.gitattributes
+.gitignore
+lint-staged.config.js
+
+### Husky ###
+.husky/
+
+### Markdown ###
+*.md
+!CHANGELOG.md
+!LICENSE
+!README.md
+
+### Node.js ###
+node_modules/
+npm-debug.log
+
+### Prettier ###
+.prettierignore
+.prettierignore_staged
+.prettierrc.json
+
+### Release Please ###
+.release-please-manifest.json
+release-please-config.json
+
+### Visual Studio Code ###
+.devcontainer/
+.vscode/

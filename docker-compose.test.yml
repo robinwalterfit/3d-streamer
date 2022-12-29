@@ -1,0 +1,80 @@
+version: "3"
+
+services:
+  e2e-chrome:
+    command: --browser chrome
+    depends_on:
+      - 3d-streamer
+    environment:
+      CYPRESS_BROWSER: chrome
+      CYPRESS_DOWNLOADS_FOLDER: /cypress/docker/chrome/downloads
+      CYPRESS_SCREENSHOTS_FOLDER: /cypress/docker/chrome/screenshots
+      CYPRESS_VIDEOS_FOLDER: /cypress/docker/chrome/videos
+    image: cypress/included:11.2.0
+    volumes:
+      - ./cypress:/3d-streamer/cypress
+      - ./cypress.config.mjs:/3d-streamer/cypress.config.mjs
+    working_dir: /3d-streamer
+
+  e2e-edge:
+    command: --browser edge
+    depends_on:
+      - 3d-streamer
+    environment:
+      CYPRESS_BROWSER: edge
+      CYPRESS_DOWNLOADS_FOLDER: /cypress/docker/edge/downloads
+      CYPRESS_SCREENSHOTS_FOLDER: /cypress/docker/edge/screenshots
+      CYPRESS_VIDEOS_FOLDER: /cypress/docker/edge/videos
+    image: cypress/included:11.2.0
+    volumes:
+      - ./cypress:/3d-streamer/cypress
+      - ./cypress.config.mjs:/3d-streamer/cypress.config.mjs
+    working_dir: /3d-streamer
+
+  e2e-electron:
+    depends_on:
+      - 3d-streamer
+    environment:
+      CYPRESS_BROWSER: electron
+      CYPRESS_DOWNLOADS_FOLDER: /cypress/docker/electron/downloads
+      CYPRESS_SCREENSHOTS_FOLDER: /cypress/docker/electron/screenshots
+      CYPRESS_VIDEOS_FOLDER: /cypress/docker/electron/videos
+    image: cypress/included:11.2.0
+    volumes:
+      - ./cypress:/3d-streamer/cypress
+      - ./cypress.config.mjs:/3d-streamer/cypress.config.mjs
+    working_dir: /3d-streamer
+
+  e2e-firefox:
+    command: --browser firefox
+    depends_on:
+      - 3d-streamer
+    environment:
+      CYPRESS_BROWSER: firefox
+      CYPRESS_DOWNLOADS_FOLDER: /cypress/docker/firefox/downloads
+      CYPRESS_SCREENSHOTS_FOLDER: /cypress/docker/firefox/screenshots
+      CYPRESS_VIDEOS_FOLDER: /cypress/docker/firefox/videos
+    image: cypress/included:11.2.0
+    volumes:
+      - ./cypress:/3d-streamer/cypress
+      - ./cypress.config.mjs:/3d-streamer/cypress.config.mjs
+    working_dir: /3d-streamer
+
+  3d-streamer:
+    build:
+      args:
+        BUILD_ARCH: ${BUILD_ARCH}
+        BUILD_OS: ${BUILD_OS}
+        BUILD_TIMESTAMP: ${BUILD_TIMESTAMP}
+        COMMIT_HASH: ${COMMIT_HASH}
+        NODE_ENV: production
+        USER_GID: 1001
+        USER_UID: ${USER_UID}
+        USERNAME: ${USERNAME}
+        VERSION: rc
+      context: .
+      dockerfile: docker/3d-streamer.Dockerfile
+      target: production
+    env_file:
+      - .env.test.local
+    image: robinwalterfit/3d-streamer:rc
