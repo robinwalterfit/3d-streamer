@@ -1,0 +1,17 @@
+version: "3.7" # otherwise there seems to be a bad gateway error
+
+services:
+  3d-streamer:
+    build:
+      args:
+        NODE_ENV: development
+        VERSION: beta
+      target: development
+    command: /bin/sh -c "while sleep 1000; do :; done"
+    depends_on:
+      - rtmp-server
+      - traefik
+    env_file: .env.development.local
+    image: robinwalterfit/3d-streamer:dev
+    volumes:
+      - ./:/workspace:cached

@@ -1,0 +1,49 @@
+{
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "bradlc.vscode-tailwindcss",
+                "dbaeumer.vscode-eslint",
+                "dtsvet.vscode-wasm",
+                "eamodio.gitlens",
+                "editorconfig.editorconfig",
+                "eiminsasete.apacheconf-snippets",
+                "github.copilot",
+                "graphql.vscode-graphql",
+                "gruntfuggly.todo-tree",
+                "ms-azuretools.vscode-docker",
+                "naumovs.color-highlight",
+                "redhat.vscode-yaml",
+                "visualstudioexptteam.vscode"
+            ],
+            "settings": {
+                "tailwindCSS.experimental.classRegex": [
+                    "tw`([^`]*)", // tw`...`
+                    "tw=\"([^\"]*)", // <div tw="..." />
+                    "tw={\"([^\"}]*)", // <div tw={"..."} />
+                    "tw\\.\\w+`([^`]*)", // tw.xxx`...`
+                    "tw\\(.*?\\)`([^`]*)" // tw(Component)`...`
+                ],
+                "tailwindCSS.includeLanguages": {
+                    "typescript": "javascript",
+                    "typescriptreact": "javascript"
+                }
+            }
+        }
+    },
+    "dockerComposeFile": ["../docker-compose.yml", "docker-compose.dev.yml"],
+    "features": {
+        "ghcr.io/devcontainers/features/docker-from-docker:1": {
+            "dockerDashComposeVersion": "v2"
+        },
+        "ghcr.io/devcontainers/features/git:1": {},
+        "ghcr.io/devcontainers/features/github-cli:1": {},
+        "ghcr.io/robinwalterfit/devcontainers-features/zsh:latest": {
+            "overwriteDefaultOhMyZSH": true
+        }
+    },
+    "name": "3D-printing streamer",
+    "postCreateCommand": "./.devcontainer/postCreateCommand.sh",
+    "service": "3d-streamer",
+    "workspaceFolder": "/workspace"
+}
