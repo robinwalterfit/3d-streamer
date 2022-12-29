@@ -1,0 +1,16 @@
+{
+    "recommendations": [
+        "bradlc.vscode-tailwindcss",
+        "dbaeumer.vscode-eslint",
+        "dtsvet.vscode-wasm",
+        "eamodio.gitlens",
+        "editorconfig.editorconfig",
+        "eiminsasete.apacheconf-snippets",
+        "github.copilot",
+        "graphql.vscode-graphql",
+        "gruntfuggly.todo-tree",
+        "ms-azuretools.vscode-docker",
+        "naumovs.color-highlight",
+        "redhat.vscode-yaml",
+    ]
+}
