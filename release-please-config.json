@@ -1,0 +1,4 @@
+{
+    "plugins": ["sentence-case"],
+    "release-type": "node"
+}
