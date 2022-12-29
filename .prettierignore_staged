@@ -1,0 +1,6 @@
+.vscode/
+public/
+static/
+.release-please-manifest.json
+pnpm-lock.yaml
+release-please-config.json

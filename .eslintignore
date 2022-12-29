@@ -1,0 +1,5 @@
+node_modules/
+public/
+static/
+.release-please-manifest.json
+release-please-config.json
