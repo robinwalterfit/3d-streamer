@@ -14,7 +14,7 @@
     </a>
 </p>
 
-3D-printing streamer is a small Gatsby.js website to watch RTMP/HLS streams of
+3D-printing streamer is a small Next.js website to watch RTMP/HLS streams of
 a custom RTMP/HLS server with nginx. This repository also provides a Dockerfile
 based on [tiangolo/nginx-rtmp-docker](https://github.com/tiangolo/nginx-rtmp-docker)
 for the nginx RTMP/HLS server.
@@ -132,11 +132,11 @@ be used to configure the project for different environments (`development`,
     -   Docker Compose: [https://docs.docker.com/compose/](https://docs.docker.com/compose/)
     -   EditorConfig: [https://editorconfig.org/](https://editorconfig.org/)
     -   ESLint: [https://eslint.org/](https://eslint.org/)
-    -   Gatsby.js: [https://www.gatsbyjs.com/](https://www.gatsbyjs.com/)
     -   GitHub: [https://github.com](https://github.com)
     -   Husky: [https://typicode.github.io/husky/#/](https://typicode.github.io/husky/#/)
     -   Lint staged: [https://github.com/okonet/lint-staged](https://github.com/okonet/lint-staged)
     -   Lodash: [https://lodash.com/](https://lodash.com/)
+    -   Next.js: [https://nextjs.org/](https://nextjs.org/)
     -   Nginx [https://www.nginx.com/](https://www.nginx.com/)
     -   Nginx RTMP Docker: [https://github.com/tiangolo/nginx-rtmp-docker](https://github.com/tiangolo/nginx-rtmp-docker)
     -   Nginx RTMP module: [https://github.com/arut/nginx-rtmp-module](https://github.com/arut/nginx-rtmp-module)

@@ -9,6 +9,7 @@
         "incremental": true,
         "isolatedModules": true,
         "jsx": "preserve",
+        "jsxImportSource": "@emotion/react",
         "lib": ["dom", "dom.iterable", "esnext"],
         "module": "esnext",
         "moduleResolution": "node",
@@ -16,10 +17,11 @@
         "noErrorTruncation": false,
         "resolveJsonModule": true,
         "skipLibCheck": true,
-        "strict": true,
+        "strict": false,
         "target": "es5",
         // Otherwise we get react-native typings which conflict with dom.lib.
-        "types": ["node", "react", "react-is/next"]
+        "types": ["node", "react"]
     },
-    "exclude": ["**/.*/", "**/node_modules", "**/public"]
+    "exclude": ["node_modules"],
+    "include": ["next-env.d.ts", "cypress.d.ts", "environment.d.ts", "twin.d.ts", "**/*.ts", "**/*.tsx"]
 }

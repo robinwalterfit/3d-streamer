@@ -21,14 +21,14 @@
         }
     },
 
-    "plugins": ["react", "react-hooks", "jsx-a11y", "cypress", "import"],
+    "plugins": ["react", "react-hooks", "import", "jsx-a11y", "cypress"],
     "env": {
         "browser": true,
         "commonjs": true,
         "es6": true,
         "node": true
     },
-    "extends": ["eslint:recommended", "prettier", "plugin:jsx-a11y/recommended"],
+    "extends": ["eslint:recommended", "prettier", "plugin:jsx-a11y/recommended", "plugin:@next/next/recommended", "plugin:@next/next/core-web-vitals"],
     "overrides": [
         {
             "files": [

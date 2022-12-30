@@ -10,10 +10,6 @@ docker-compose*.yml
 .eslintignore
 .eslintrc
 
-### Gatsby.js ###
-.cache/
-public/
-
 ### Git ###
 .github/
 commitlint.config.js
@@ -30,7 +26,11 @@ lint-staged.config.js
 !LICENSE
 !README.md
 
+### Next.js ###
+.next/
+
 ### Node.js ###
+.pnpm-store/
 node_modules/
 npm-debug.log
 
