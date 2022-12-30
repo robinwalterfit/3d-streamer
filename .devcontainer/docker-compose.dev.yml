@@ -4,8 +4,16 @@ services:
   3d-streamer:
     build:
       args:
+        BUILD_ARCH: ${BUILD_ARCH}
+        BUILD_OS: ${BUILD_OS}
+        BUILD_TIMESTAMP: ${BUILD_TIMESTAMP}
+        COMMIT_HASH: ${COMMIT_HASH}
         NODE_ENV: development
+        USER_GID: 1001
+        USER_UID: ${USER_UID}
+        USERNAME: ${USERNAME}
         VERSION: beta
+      dockerfile: docker/3d-streamer.Dockerfile
       target: development
     command: /bin/sh -c "while sleep 1000; do :; done"
     depends_on:

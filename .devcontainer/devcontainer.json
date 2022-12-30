@@ -27,7 +27,8 @@
                 "tailwindCSS.includeLanguages": {
                     "typescript": "javascript",
                     "typescriptreact": "javascript"
-                }
+                },
+                "terminal.integrated.defaultProfile.linux": "zsh"
             }
         }
     },
