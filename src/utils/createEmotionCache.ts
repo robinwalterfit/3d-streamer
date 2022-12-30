@@ -21,5 +21,5 @@ export default function createEmotionCache(): EmotionCache {
         insertionPoint = emotionInsertionPoint ?? undefined
     }
 
-    return createCache({ key: "3d-streamer-next", insertionPoint })
+    return createCache({ key: "streamer-next", insertionPoint })
 }
