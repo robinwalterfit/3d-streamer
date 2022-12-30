@@ -31,7 +31,7 @@ LABEL me.robinwalter.rtmp-server.license="SPDX-License-Identifier: MIT"
 LABEL me.robinwalter.rtmp-server.version=$VERSION
 
 # The project uses pnpm
-RUN corepack enable
+RUN corepack enable pnpm
 
 RUN mkdir -p /tmp/web
 
@@ -56,7 +56,7 @@ ARG BUILD_TIMESTAMP
 ENV BUILD_TIMESTAMP=${BUILD_TIMESTAMP:-n/a}
 ARG COMMIT_HASH
 ENV COMMIT_HASH=${COMMIT_HASH:-n/a}
-ENV GATSBY_TELEMETRY_DISABLED=1
+ENV NEXT_TELEMETRY_DISABLED 1
 ARG NODE_ENV
 ENV NODE_ENV=production
 ENV npm_config_cache=/var/cache/buildkit/npm
@@ -79,7 +79,7 @@ LABEL me.robinwalter.rtmp-server.license="SPDX-License-Identifier: MIT"
 LABEL me.robinwalter.rtmp-server.version=$VERSION
 
 # The project uses pnpm
-RUN corepack enable
+RUN corepack enable pnpm
 
 RUN mkdir -p /tmp/web
 
@@ -94,20 +94,25 @@ COPY ./package*.json /tmp/web/
 COPY ./pnpm-*.yaml /tmp/web/
 # Website: 3d-streamer - copy only the source code
 COPY ./src /tmp/web/src
-COPY ./static /tmp/web/static
-COPY ./.env.production.local /tmp/web/.env.production.local
-COPY ./gatsby-*.js /tmp/web/
-COPY ./LICENSE /tmp/web/LICENSE
-COPY ./README.md /tmp/web/README.md
-COPY ./tailwind.config.js /tmp/web/tailwind.config.js
-COPY ./tsconfig.json /tmp/web/tsconfig.json
+COPY ./public /tmp/web/public
+COPY ./.env.$NODE_ENV.local /tmp/web/.env.$NODE_ENV.local
+# Only needed because it's referenced in tsconfig.json
+COPY ./cypress.d.ts /tmp/web/
+COPY ./environment.d.ts /tmp/web/
+COPY ./LICENSE /tmp/web/
+COPY ./next-env.d.ts /tmp/web/
+COPY ./next.config.js /tmp/web/
+COPY ./README.md /tmp/web/
+COPY ./tailwind.config.js /tmp/web/
+COPY ./tsconfig.json /tmp/web/
+COPY ./twin.d.ts /tmp/web/
+COPY ./withTwin.js /tmp/web/
 
 # Install dependencies (offline)
 RUN --mount=type=cache,target=$npm_config_store_dir \
     pnpm install --frozen-lockfile --ignore-scripts --prefer-offline --prod
 
-# Build the app with secret environment variables
-RUN pnpm run generate
+RUN pnpm run export
 
 # -------------------------> The RTMP/HLS server image
 FROM buildpack-deps:bullseye
@@ -202,7 +207,7 @@ RUN mkdir /nginx
 
 # Copy website to watch HLS-streams
 RUN rm /usr/local/nginx/html/index.html
-COPY --from=web-build /tmp/web/public /usr/local/nginx/html
+COPY --from=web-build /tmp/web/out /usr/local/nginx/html
 
 # Set up config file
 COPY nginx.conf /etc/nginx/nginx.conf

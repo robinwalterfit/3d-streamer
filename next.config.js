@@ -68,6 +68,11 @@ const nextConfig = {
     compiler: {
         emotion: true,
     },
+    eslint: {
+        // ESLint won't be available in production builds of the Docker image. This is ok, because
+        // only commits that pass the linting process will be pushed to the repository.
+        ignoreDuringBuilds: true,
+    },
     async headers() {
         return [
             {

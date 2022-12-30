@@ -10,7 +10,7 @@ services:
       CYPRESS_DOWNLOADS_FOLDER: /cypress/docker/chrome/downloads
       CYPRESS_SCREENSHOTS_FOLDER: /cypress/docker/chrome/screenshots
       CYPRESS_VIDEOS_FOLDER: /cypress/docker/chrome/videos
-    image: cypress/included:11.2.0
+    image: cypress/included:12.2.0
     volumes:
       - ./cypress:/3d-streamer/cypress
       - ./cypress.config.mjs:/3d-streamer/cypress.config.mjs
@@ -25,7 +25,7 @@ services:
       CYPRESS_DOWNLOADS_FOLDER: /cypress/docker/edge/downloads
       CYPRESS_SCREENSHOTS_FOLDER: /cypress/docker/edge/screenshots
       CYPRESS_VIDEOS_FOLDER: /cypress/docker/edge/videos
-    image: cypress/included:11.2.0
+    image: cypress/included:12.2.0
     volumes:
       - ./cypress:/3d-streamer/cypress
       - ./cypress.config.mjs:/3d-streamer/cypress.config.mjs
@@ -39,7 +39,7 @@ services:
       CYPRESS_DOWNLOADS_FOLDER: /cypress/docker/electron/downloads
       CYPRESS_SCREENSHOTS_FOLDER: /cypress/docker/electron/screenshots
       CYPRESS_VIDEOS_FOLDER: /cypress/docker/electron/videos
-    image: cypress/included:11.2.0
+    image: cypress/included:12.2.0
     volumes:
       - ./cypress:/3d-streamer/cypress
       - ./cypress.config.mjs:/3d-streamer/cypress.config.mjs
@@ -54,7 +54,7 @@ services:
       CYPRESS_DOWNLOADS_FOLDER: /cypress/docker/firefox/downloads
       CYPRESS_SCREENSHOTS_FOLDER: /cypress/docker/firefox/screenshots
       CYPRESS_VIDEOS_FOLDER: /cypress/docker/firefox/videos
-    image: cypress/included:11.2.0
+    image: cypress/included:12.2.0
     volumes:
       - ./cypress:/3d-streamer/cypress
       - ./cypress.config.mjs:/3d-streamer/cypress.config.mjs

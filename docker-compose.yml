@@ -9,6 +9,8 @@ services:
         BUILD_TIMESTAMP: ${BUILD_TIMESTAMP}
         COMMIT_HASH: ${COMMIT_HASH}
         VERSION: latest
+      context: .
+      dockerfile: docker/rtmp-server.Dockerfile
     container_name: rtmp-server
     depends_on:
       - traefik

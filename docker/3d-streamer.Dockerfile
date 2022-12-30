@@ -45,7 +45,7 @@ RUN --mount=type=cache,target=/var/cache/apt \
     rm -rf /var/lib/apt/lists/*
 
 # The project uses pnpm
-RUN corepack enable
+RUN corepack enable pnpm
 
 WORKDIR /usr/src
 
@@ -72,7 +72,7 @@ ARG BUILD_TIMESTAMP
 ENV BUILD_TIMESTAMP=${BUILD_TIMESTAMP:-n/a}
 ARG COMMIT_HASH
 ENV COMMIT_HASH=${COMMIT_HASH:-n/a}
-ENV GATSBY_TELEMETRY_DISABLED=1
+ENV NEXT_TELEMETRY_DISABLED 1
 ARG NODE_ENV
 ENV NODE_ENV=${NODE_ENV:-production}
 ENV npm_config_cache=/var/cache/buildkit/npm
@@ -95,7 +95,7 @@ LABEL me.robinwalter.3d-streamer.license="SPDX-License-Identifier: MIT"
 LABEL me.robinwalter.3d-streamer.version=$VERSION
 
 # The project uses pnpm
-RUN corepack enable
+RUN corepack enable pnpm
 
 WORKDIR /usr/src
 
@@ -108,13 +108,19 @@ COPY ./package*.json /usr/src/
 COPY ./pnpm-*.yaml /usr/src/
 # Website: 3d-streamer - copy only the source code
 COPY ./src /usr/src/src
-COPY ./static /usr/src/static
+COPY ./public /usr/src/public
 COPY ./.env.$NODE_ENV.local /usr/src/.env.$NODE_ENV.local
-COPY ./gatsby-*.js /usr/src/
+# Only needed because it's referenced in tsconfig.json
+COPY ./cypress.d.ts /usr/src/
+COPY ./environment.d.ts /usr/src/
 COPY ./LICENSE /usr/src/
+COPY ./next-env.d.ts /usr/src/
+COPY ./next.config.js /usr/src/
 COPY ./README.md /usr/src/
 COPY ./tailwind.config.js /usr/src/
 COPY ./tsconfig.json /usr/src/
+COPY ./twin.d.ts /usr/src/
+COPY ./withTwin.js /usr/src/
 
 # Install dependencies (offline)
 RUN --mount=type=cache,target=$npm_config_store_dir \
@@ -124,8 +130,8 @@ RUN --mount=type=cache,target=$npm_config_store_dir \
         pnpm install --frozen-lockfile --prefer-offline; \
     fi
 
-# Build the app with secret environment variables
-RUN pnpm run generate
+# This actually runs "next build" and "next export"
+RUN pnpm run export
 
 # ---------> The export image
 FROM scratch AS export
@@ -154,7 +160,7 @@ LABEL me.robinwalter.3d-streamer.homepage="https://github.com/robinwalterfit/3d-
 LABEL me.robinwalter.3d-streamer.license="SPDX-License-Identifier: MIT"
 LABEL me.robinwalter.3d-streamer.version=$VERSION
 
-COPY --from=build /usr/src/public /
+COPY --from=build /usr/src/out /
 
 # ----------------------------> The production image
 FROM node:18.12.1-bullseye-slim AS production
@@ -167,14 +173,14 @@ ARG BUILD_TIMESTAMP
 ENV BUILD_TIMESTAMP=${BUILD_TIMESTAMP:-n/a}
 ARG COMMIT_HASH
 ENV COMMIT_HASH=${COMMIT_HASH:-n/a}
-ENV GATSBY_TELEMETRY_DISABLED=1
+ENV NEXT_TELEMETRY_DISABLED 1
 ARG NODE_ENV
 ENV NODE_ENV=${NODE_ENV:-production}
 ARG VERSION
 ENV VERSION=${VERSION:-latest}
 
 # User mapping - important for devcontainers
-ARG USERNAME=gatsby
+ARG USERNAME=next
 ARG USER_UID=1001
 ARG USER_GID=$USER_UID
 
@@ -205,12 +211,16 @@ RUN chown $USERNAME:$USERNAME /usr/src
 # Copy virtual store from dependencies stage
 COPY --chown=$USERNAME:$USERNAME --from=dependencies /usr/src/node_modules /usr/src/node_modules
 
-COPY --chown=$USERNAME:$USERNAME --from=build /usr/src/public /usr/src/public
+COPY --chown=$USERNAME:$USERNAME --from=build /usr/src/public /public
+# Automatically leverage output traces to reduce image size
+# https://nextjs.org/docs/advanced-features/output-file-tracing
+COPY --chown=$USERNAME:$USERNAME --from=build /usr/src/.next/standalone /
+COPY --chown=$USERNAME:$USERNAME --from=build /usr/src/.next/static /.next/static
 
 USER $USERNAME
 
-EXPOSE 8000
-CMD [ "dumb-init", "npm", "run", "serve" ]
+EXPOSE 3000
+CMD [ "dumb-init", "node", "server.js" ]
 
 # -----------------------> The development image
 FROM node:18.12.1-bullseye AS development
@@ -223,14 +233,16 @@ ARG BUILD_TIMESTAMP
 ENV BUILD_TIMESTAMP=${BUILD_TIMESTAMP:-n/a}
 ARG COMMIT_HASH
 ENV COMMIT_HASH=${COMMIT_HASH:-n/a}
-ENV GATSBY_TELEMETRY_DISABLED=1
+ENV NEXT_TELEMETRY_DISABLED 1
 ARG NODE_ENV
 ENV NODE_ENV=${NODE_ENV:-development}
+# PNPM uses npm config -> pnpm config is alias for npm config
+ENV npm_config_store_dir=/var/cache/buildkit/pnpm-store
 ARG VERSION
 ENV VERSION=${VERSION:-dev}
 
 # User mapping - important for devcontainers
-ARG USERNAME=gatsby
+ARG USERNAME=next
 ARG USER_UID=1001
 ARG USER_GID=$USER_UID
 
@@ -251,7 +263,7 @@ LABEL me.robinwalter.3d-streamer.version=$VERSION
 COPY --from=dependencies /usr/bin/dumb-init /usr/bin/dumb-init
 
 # The project uses pnpm
-RUN corepack enable
+RUN corepack enable pnpm
 
 # Add non-root user
 RUN groupadd -g $USER_GID $USERNAME && \
@@ -273,6 +285,6 @@ COPY --chown=$USERNAME:$USERNAME --from=build /usr/src /usr/src
 
 USER $USERNAME
 
-EXPOSE 8000
+EXPOSE 3000
 EXPOSE 9229
 CMD [ "dumb-init", "pnpm", "run", "start" ]
