@@ -6,9 +6,10 @@ const path = require("path")
 
 // The folders containing files importing twin.macro
 const includedDirs = [
-    path.resolve(__dirname, "components"),
-    path.resolve(__dirname, "pages"),
-    path.resolve(__dirname, "styles"),
+    path.resolve(__dirname, "src", "components"),
+    path.resolve(__dirname, "src", "pages"),
+    path.resolve(__dirname, "src", "styles"),
+    path.resolve(__dirname, "src", "utils"),
 ]
 
 module.exports = function withTwin(nextConfig) {
@@ -19,22 +20,39 @@ module.exports = function withTwin(nextConfig) {
             config.module = config.module || {}
             config.module.rules = config.module.rules || []
             config.module.rules.push({
-                test: /\.(tsx|ts)$/,
                 include: includedDirs,
+                test: /\.(js|jsx)$/,
                 use: [
                     options.defaultLoaders.babel,
                     {
                         loader: "babel-loader",
                         options: {
-                            sourceMaps: dev,
+                            plugins: [require.resolve("babel-plugin-macros"), require.resolve("@emotion/babel-plugin")],
                             presets: [
                                 ["@babel/preset-react", { runtime: "automatic", importSource: "@emotion/react" }],
                             ],
+                            sourceMaps: dev,
+                        },
+                    },
+                ],
+            })
+            config.module.rules.push({
+                include: includedDirs,
+                test: /\.(ts|tsx)$/,
+                use: [
+                    options.defaultLoaders.babel,
+                    {
+                        loader: "babel-loader",
+                        options: {
                             plugins: [
                                 require.resolve("babel-plugin-macros"),
                                 require.resolve("@emotion/babel-plugin"),
                                 [require.resolve("@babel/plugin-syntax-typescript"), { isTSX: true }],
                             ],
+                            presets: [
+                                ["@babel/preset-react", { runtime: "automatic", importSource: "@emotion/react" }],
+                            ],
+                            sourceMaps: dev,
                         },
                     },
                 ],

@@ -19,7 +19,7 @@ import type { AppProps } from "next/app"
 import type { EmotionCache } from "@emotion/cache"
 
 import createEmotionCache from "../utils/createEmotionCache"
-import GlobalStyles from "./../styles/GlobalStyles"
+import GlobalStyles from "../styles/GlobalStyles"
 import Layout from "../components/Layout"
 
 // Client-side cache, shared for the whole session of the user in the browser.
