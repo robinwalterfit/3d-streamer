@@ -129,8 +129,8 @@
         "serve": "next start",
         "start": "pnpm run dev",
         "test": "pnpm run test:component && pnpm run test:e2e",
-        "test:component": "cy:component:run:headless",
-        "test:e2e": "start-server-and-test serve http://localhost:8000 cy:run:headless",
+        "test:component": "pnpm run cy:component:run:headless",
+        "test:e2e": "start-server-and-test serve http://localhost:3000 cy:run:headless",
         "typecheck": "tsc -p tsconfig.json"
     },
     "version": "0.1.0"
